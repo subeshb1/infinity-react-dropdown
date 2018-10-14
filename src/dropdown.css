@@ -1,0 +1,29 @@
+.infinity.drop-down {
+  position: relative;
+}
+
+.infinity.drop-down .menu {
+  display: none ;
+  flex-direction: column;
+  position: absolute;
+  /* width: 100%; */
+}
+.infinity.drop-down .menu.active { 
+  
+  display: flex;
+}
+
+.infinity.drop-down .content {
+  max-height: 200px;
+  overflow: auto;
+}
+.infinity.drop-down .content .item{
+  text-transform: capitalize;
+  padding: 4px;
+  background: white;
+  
+}
+.infinity.drop-down .content .sub{
+  background: rgb(199, 199, 199);
+  
+}

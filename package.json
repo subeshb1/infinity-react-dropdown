@@ -1,0 +1,24 @@
+{
+  "name": "infinity-react-dropdown",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:subeshb1/infinity-react-dropdown.git",
+  "author": "'Subesh <'subeshb1@gmail.com'>",
+  "license": "MIT",
+  "devDependencies": {
+    "@storybook/addon-info": "^3.4.11",
+    "@storybook/addons": "^3.4.11",
+    "@storybook/react": "^3.4.11",
+    "babel-core": "^6.26.3",
+    "storybook-addon-jsx": "^5.4.0"
+  },
+  "dependencies": {
+    "fp-small": "^1.0.1",
+    "proptypes": "^1.1.0",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
+  },
+  "scripts": {
+    "storybook": "start-storybook -p 6006 -c .storybook"
+  }
+}
