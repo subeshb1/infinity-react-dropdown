@@ -58,11 +58,16 @@ const toDropDownContent = (items, input = "") => {
 };
 
 class DropDown extends Component {
+  static id = 0;
   state = {
     input: "",
     active: false,
-    value: ""
+    value: "",
+    selectedItem: -1
   };
+  visibleItem = -1;
+  value = "";
+  maxLength = Infinity;
   static propTypes = {
     /** Trigger DropDown*/
     show: PropTypes.bool,
@@ -73,6 +78,7 @@ class DropDown extends Component {
     ]),
     placeholder: PropTypes.string
   };
+  id = DropDown.id++;
 
   static defaultProps = {
     show: false,
@@ -80,6 +86,43 @@ class DropDown extends Component {
   };
   ref = React.createRef();
   componentDidMount() {}
+  onChangeValue(value) {
+    this.ref.current.blur();
+    this.setState(
+      ({ input }) => ({
+        value: value || input,
+        active: false,
+        input: ""
+      }),
+
+      () => {
+        this.props.onChange && this.props.onChange(this.state.value);
+      }
+    );
+  }
+
+  keyPress = e => {
+    if (e.key === "Enter") {
+      this.onChangeValue(this.value);
+      return;
+    }
+    if (!/Arrow/gi.test(e.key)) return;
+    if (e.key === "ArrowDown")
+      this.visibleItem = Math.min(this.maxLength, this.visibleItem + 1);
+    else if (e.key === "ArrowUp")
+      this.visibleItem = Math.max(-1, this.visibleItem - 1);
+
+    this.setState({}, () => {
+      const activeItem = document.querySelector(
+        `#inf-dropdown-${this.id} .item.active`
+      );
+      const content = document.querySelector(
+        `#inf-dropdown-${this.id} .content`
+      );
+      if (!activeItem || !content) return;
+      content.scrollTop += activeItem.getBoundingClientRect().top - 200;
+    });
+  };
 
   onChange = e => {
     this.setState({ input: e.target.value });
@@ -89,26 +132,42 @@ class DropDown extends Component {
     const { items = [], placeholder } = this.props;
     let itemsRender = toDropDownContent(items, input);
     const isEmpty = !itemsRender || itemsRender[0] == undefined;
-    console.log(itemsRender);
-    if (!isEmpty)
-      itemsRender = itemsRender.map(
-        x =>
-          x.props.className === "item" ? (
-            <x.type
-              {...x.props}
-              onClick={() => {
-                this.setState({ value: x.props.value, active: false });
-              }}
-            />
-          ) : (
-            x
-          )
-      );
+    if (!isEmpty) {
+      let count = -1;
+      itemsRender = itemsRender.map(x => {
+        const i = x.props.className === "item" ? ++count : count;
+        if (this.visibleItem === i) {
+          this.value = x.props.value;
+        }
+        return x.props.className === "item" ? (
+          <x.type
+            key={i}
+            {...x.props}
+            value={undefined}
+            className={this.visibleItem === i ? "item active" : "item"}
+            onMouseEnter={() => {
+              this.visibleItem = i;
+              this.value = x.props.value;
+              this.setState({}, () => {});
+            }}
+            onClick={() => {
+              this.onChangeValue(x.props.value);
+            }}
+          />
+        ) : (
+          x
+        );
+      });
+      this.maxLength = count;
+    } else {
+      this.visibleItem = -1;
+      this.value = "";
+    }
 
     return (
       <div
+        id={"inf-dropdown-" + this.id}
         className={`infinity drop-down ${active ? "active" : ""}`}
-        style={{ width: 200 }}
         tabIndex="0"
         onFocus={e => {
           this.setState({ active: true }, () => {
@@ -122,12 +181,13 @@ class DropDown extends Component {
 
         <div className={`menu `}>
           <input
+            value={input}
             onChange={this.onChange}
             ref={this.ref}
             onBlur={() => this.setState({ active: false })}
+            onKeyDown={this.keyPress}
           />
           <div className="content">{itemsRender}</div>
-          {isEmpty && <button>Add</button>}
         </div>
       </div>
     );

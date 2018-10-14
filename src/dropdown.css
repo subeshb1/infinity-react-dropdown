@@ -4,16 +4,19 @@
 }
 .infinity.drop-down {
   border-radius: 4px;
-  box-shadow: 0 0 2px grey;
   position: relative;
   padding: 10px;
+  background: white;
   outline: none;
+  box-shadow: 0 0 0 1px #ccc;
 }
 .infinity.drop-down.active {
   border-radius: 4px 4px 0 0;
+  box-shadow: 0 0 2px grey;
 }
 
 .infinity.drop-down .menu {
+  background: white;
   left: 0;
   top: 100%;
   display: none;
@@ -21,7 +24,7 @@
   position: absolute;
   width: 100%;
   border-radius: 0 0 4px 4px;
-  box-shadow: 0px 1px 2px 0px #b0b0b0;
+  box-shadow: 0px 0px 2px 0px #b0b0b0;
   overflow: hidden;
 }
 .infinity.drop-down.active .menu {
@@ -38,8 +41,8 @@
   font-weight: normal;
   cursor: pointer;
 }
-.infinity.drop-down .content .item:hover {
-  background: rgb(0, 135, 177);
+.infinity.drop-down .content .item.active {
+  background: #207280;
   color: white;
 }
 .infinity.drop-down .content .sub {
@@ -50,16 +53,17 @@
 .infinity.drop-down .content .sub:after {
   content: " ";
   height: 1px;
-  background: rgb(185, 185, 185);
+  background: rgb(221, 221, 221);
   display: block;
 }
 
 .infinity.drop-down .menu input {
   margin: 5px;
-  padding: 6px;
+  padding: 8px;
   border-radius: 4px;
+  width: calc(100% - 10px);
   outline: none;
-  border: 1px solid rgb(190, 190, 190);
+  border: 1px solid rgb(25, 134, 177);
 }
 
 .infinity.drop-down .trigger {
@@ -70,6 +74,7 @@
 .infinity.drop-down .placeholder {
   color: grey;
 }
-.infinity.drop-down .placeholder, .infinity.drop-down .value{
+.infinity.drop-down .placeholder,
+.infinity.drop-down .value {
   overflow: hidden;
 }
